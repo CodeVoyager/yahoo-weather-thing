@@ -41,13 +41,10 @@ YahooWeather.performAjax = function (url, options, callback) {
         .end();
 };
 
-YahooWeather.getWeather = function (location, callback) {
+YahooWeather.getWeather = function (zipcodes, callback) {
     this.performAjax('/v1/public/yql', {
-        q: ['select * from weather.forecast where woeid in (select woeid from geo.places(1) where text="', location.join(', '), '")'].join('')
+        q: ['select * from weather.forecast where woeid in (select woeid from geo.places where placetype=\'Zip\' and text in(', zipcodes.join(', '), ') and country=\'United States\')'].join('')
     }, callback || (function () {}));
 };
-
-YahooWeather.DEFAULT_OFFSET = 0;
-YahooWeather.DEFAULT_LIMIT = 25;
 
 module.exports = YahooWeather;

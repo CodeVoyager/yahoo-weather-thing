@@ -1,4 +1,12 @@
-.weather-info {}
+.weather-info {
+    padding-bottom: 2rem;
+    margin-bottom: 2rem;
+    border-bottom: 1px solid get-color(color10);
+    &:last-of-type {
+        border-bottom: none;
+        margin-bottom: 0;
+    }
+}
 
 .weather-info__title {
     font-size: 2rem;

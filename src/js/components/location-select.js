@@ -2,14 +2,15 @@ import React from 'react';
 import LocationItemSelect from './location-select-item';
 
 const CITY = 0,
-    STATE = 1;
+    STATE = 1,
+    NOT_FOUND = -1;
 
 let LocationSelect = (props) => {
     let items = null;
 
     if (props.locations && props.locations instanceof Array) {
         items = props.locations.map((location, i) => {
-            return (<LocationItemSelect isSelected={i === props.selectedLocation} key={i} id={i} city={location[CITY]} state={location[STATE]} onClick={props.onLocationClick.bind(this, i)} />);
+            return (<LocationItemSelect isSelected={NOT_FOUND !== props.selectedLocations.indexOf(i)} key={i} id={i} city={location[CITY]} state={location[STATE]} onClick={props.onLocationClick.bind(this, i)} />);
         });
     }
 

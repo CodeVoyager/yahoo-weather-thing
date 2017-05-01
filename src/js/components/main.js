@@ -6,27 +6,33 @@ import LocationSelect from './location-select';
 import Loader from './loader';
 import WeatherInfo from './weather-info';
 import {
-    SET_SELECTED_LOCATION,
+    SET_SELECTED_LOCATIONS,
     SET_LOCATIONS,
     START_LOADING,
     STOP_LOADING,
-    SET_WEATHER_INFO,
+    SET_WEATHER_INFOS,
     SET_UNITS
 } from '../config/constants';
 
 const CITY = 0,
-    STATE = 1;
+    STATE = 1,
+    ZIP = 2,
+    NOT_FOUND = -1;
 
 
 const mapStateToProps = (state) => {
     return {
         isLoading: state.isLoading,
         locations: state.locations,
-        weatherInfo: state.weatherInfo,
+        weatherInfos: state.weatherInfos,
         units: state.units,
-        selectedLocation: state.selectedLocation
+        selectedLocations: state.selectedLocations
     }
 }
+
+const id = (a) => {
+    return a;
+};
 
 class Main extends Component {
     componentDidMount() {
@@ -47,7 +53,7 @@ class Main extends Component {
 
         superagent
             .get(config.url)
-            .query(config.query || {})
+            .query(config.data || {})
             .end((err, res) => {
                 appStore.dispatch({
                     type: STOP_LOADING
@@ -63,54 +69,103 @@ class Main extends Component {
     }
 
     onLocationClick(selectedLocation) {
+        let state = appStore.getState(),
+            _selectedLocations = state.selectedLocations;
+
+        if (NOT_FOUND !== _selectedLocations.indexOf(selectedLocation)) {
+            _selectedLocations = _selectedLocations.filter(function (id) {
+                return selectedLocation !== id;
+            });
+        } else {
+            _selectedLocations.push(selectedLocation);
+        }
+
         appStore.dispatch({
-            type: SET_SELECTED_LOCATION,
-            selectedLocation: selectedLocation
+            type: SET_SELECTED_LOCATIONS,
+            selectedLocations: _selectedLocations.map(id)
         });
     }
 
     onSubmitClick() {
-        if (null !== this.props.selectedLocation) {
-            this.fetchLocationWeatherData(this.props.locations[this.props.selectedLocation]);
+        if (this.props.selectedLocations.length) {
+            this.fetchLocationWeatherData(this.props.locations.filter((item, i) => {
+                return NOT_FOUND !== this.props.selectedLocations.indexOf(i);
+            }));
         }
     }
 
-    fetchLocationWeatherData(location) {
+    fetchLocationWeatherData(locations) {
+        let data,
+            url;
+
+        if (1 === locations.length) {
+            data = {
+                zip: locations[0][ZIP]
+            };
+            url = '/api/location/weather';
+        } else {
+            data = {
+                zip: locations.map((location) => {
+                    return location[ZIP];
+                })
+            };
+            url = '/api/location/weather/multiple';
+        }
+
         this.performApiCall({
-            url: '/api/location/weather',
-            query: {
-                city: location[CITY],
-                state: location[STATE],
-            }
+            url: url,
+            data: data
         }, (data) => {
             if (data.query && data.query.results) {
-                appStore.dispatch({
-                    type: SET_UNITS,
-                    units: data.query.results.channel.units
-                });
-                appStore.dispatch({
-                    type: SET_WEATHER_INFO,
-                    weatherInfo: {
-                        title: data.query.results.channel.item.title,
-                        condition: data.query.results.channel.item.condition,
-                        forecast: data.query.results.channel.item.forecast,
-                        wind: data.query.results.channel.wind,
-                        atmosphere: data.query.results.channel.atmosphere
+                let weatherInfos = [],
+                    index = -1;
+                if (data.query.results.channel && data.query.results.channel instanceof Object && !(data.query.results.channel instanceof Array)) {
+                    data.query.results.channel = [data.query.results.channel];
+                }
+                if (data.query.results.channel && data.query.results.channel instanceof Array) {
+                    weatherInfos = data.query.results.channel.map((channel) => {
+                        return ({
+                            title: channel.item.title,
+                            condition: channel.item.condition,
+                            forecast: channel.item.forecast,
+                            wind: channel.wind,
+                            atmosphere: channel.atmosphere
+                        });
+                    })
+
+                    if (data.query.results.channel.length) {
+                        appStore.dispatch({
+                            type: SET_UNITS,
+                            units: data.query.results.channel[0].units
+                        });
                     }
-                });
+
+                    appStore.dispatch({
+                        type: SET_WEATHER_INFOS,
+                        weatherInfos: weatherInfos
+                    });
+                }
             }
         });
     }
 
     render() {
+        let weatherInfos = null;
+
+        if (this.props.weatherInfos && this.props.weatherInfos.length) {
+            weatherInfos = this.props.weatherInfos.map(function (weatherInfo, i) {
+                return (<WeatherInfo key={i} weatherInfo={weatherInfo} units={this.props.units} />);
+            }.bind(this));
+        }
+
         return (
             <div className="main-wrapper main-app">
                 <div className="main-wrapper__inner">
                     <div className="main-title">
                         Yahoo Weather Reader
                     </div>
-                    <LocationSelect locations={this.props.locations} selectedLocation={this.props.selectedLocation} onLocationClick={this.onLocationClick} onSubmitClick={this.onSubmitClick.bind(this)} />
-                    <WeatherInfo weatherInfo={this.props.weatherInfo} units={this.props.units} />
+                    <LocationSelect locations={this.props.locations} selectedLocations={this.props.selectedLocations} onLocationClick={this.onLocationClick} onSubmitClick={this.onSubmitClick.bind(this)} />
+                    {weatherInfos}
                 </div>
                 <Loader isLoading={this.props.isLoading} />
             </div>
