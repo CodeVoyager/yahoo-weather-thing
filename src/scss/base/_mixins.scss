@@ -1,0 +1,19 @@
+@import 'variables';
+
+@mixin respond-to($media) {
+    @if $media == small-screen {
+        @media (max-width: $middle - 1) {
+            @content;
+        }
+    }
+    @else if $media == middle-screen {
+        @media (min-width: $middle) and (max-width: $normal - 1) {
+            @content;
+        }
+    }
+    @else if $media == normal-screen {
+        @media (min-width: $normal) {
+            @content;
+        }
+    }
+}

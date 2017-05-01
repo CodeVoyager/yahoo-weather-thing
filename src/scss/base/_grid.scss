@@ -1,0 +1,28 @@
+.grid {
+    box-sizing: border-box;
+    overflow: hidden;
+    display: block;
+    width: 100%;
+    * {
+        box-sizing: border-box;
+    }
+}
+
+%column {
+    display: inline-block;
+    padding-left: 1%;
+    padding-right: 1%;
+}
+
+$all-screen-sizes: normal-screen middle-screen small-screen;
+$colums: 12;
+@each $current-size in $all-screen-sizes {
+    @for $i from 1 to ($colums + 1) {
+        .grid__column-#{$i}--#{$current-size} {
+            @extend %column;
+            @include respond-to($current-size) {
+                width: percentage($i / $colums);
+            }
+        }
+    }
+}

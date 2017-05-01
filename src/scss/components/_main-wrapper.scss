@@ -1,0 +1,12 @@
+.main-wrapper {
+    display: block;
+    clear: both;
+    width: 100%;
+}
+
+.main-wrapper__inner {
+    width: 100%;
+    display: block;
+    margin: 0 auto;
+    max-width: $site-width;
+}

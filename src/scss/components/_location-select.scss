@@ -1,0 +1,70 @@
+.location-select {
+    display: block;
+    padding: 1rem 0;
+    width: 100%;
+    max-width: $site-width / 2;
+    margin: 0 auto;
+}
+
+.location-select__header {
+    text-align: center;
+    font-size: 1.5rem;
+    line-height: 1em;
+    color: get-color(color10);
+    margin-bottom: 1.5rem;
+}
+
+.location-select__step {
+    font-weight: 700;
+    color: get-color(color10);
+    padding: 0.8rem 0;
+    @include respond-to (small-screen) {
+        text-align: center;
+    }
+}
+
+.location-select__items {}
+
+.location-select__items__item {
+    display: block;
+    width: 100%;
+    text-transform: uppercase;
+    line-height: 1.3rem;
+    font-size: 1.2rem;
+    cursor: pointer;
+    transition: 0.3s background-color ease-in, 0.3s color ease-in;
+    padding: 0.3rem 0.5rem;
+    &:hover {
+        background-color: get-color(color10);
+        color: get-color(color1);
+    }
+    @include respond-to (small-screen) {
+        font-size: 1.5rem;
+        text-align: center;
+    }
+}
+
+.location-select__items__item--selected {
+    @extend .location-select__items__item;
+    background-color: darken(get-color(color10), 10%);
+    color: get-color(color1);
+}
+
+.location-select__button-wrapper {
+    display: block;
+    text-align: center;
+}
+
+.location-select__button-wrapper__button {
+    display: inline-block;
+    color: get-color(color1);
+    background-color: get-color(color3);
+    padding: 1rem 1.5rem;
+    line-height: 1.2em;
+    font-size: 1.2rem;
+    cursor: pointer;
+    transition: 0.3s background-color linear;
+    &:hover {
+        background-color: darken(get-color(color3), 5%);
+    }
+}

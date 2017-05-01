@@ -1,0 +1,120 @@
+.weather-info {}
+
+.weather-info__title {
+    font-size: 2rem;
+    font-weight: 400;
+    color: get-color(color10);
+    text-align: center;
+}
+
+.weather-info__status {
+    text-align: center;
+    padding: 1.5rem 0;
+    @include respond-to (small-screen) {
+        margin: 1rem 0.5rem;
+        padding: 0;
+        border-top: 1px solid get-color(color3);
+        border-bottom: 1px solid get-color(color3);
+    }
+}
+
+.weather-info__status__item {
+    font-weight: 700;
+    margin-right: 0.8rem;
+    padding-right: 0.8rem;
+    border-right: 1px solid get-color(color3);
+    display: inline-block;
+    &:last-of-type {
+        border: none;
+        padding-right: 0;
+        margin-right: 0;
+    }
+    @include respond-to (small-screen) {
+        padding: 0.7rem 0;
+        margin: 1rem 0;
+        border-bottom: 1px solid get-color(color3);
+        border-right: none;
+        display: block;
+        &:last-of-type {
+            border-bottom: none;
+        }
+    }
+}
+
+.weather-info__status__wind {
+    @extend .weather-info__status__item;
+}
+
+.weather-info__status__pressure {
+    @extend .weather-info__status__item;
+}
+
+.weather-info__status__temperature {
+    @extend .weather-info__status__item;
+}
+
+.weather-info__status__title {
+    @extend .weather-info__status__item;
+}
+
+.weather-info__forecast {}
+
+.weather-info__forecast__title {
+    @extend .weather-info__title;
+    padding-bottom: 1rem;
+}
+
+.weather-info__forecast__item {
+    padding-bottom: 1rem;
+    padding-top: 1rem;
+    &[data-status="sunny"] {
+        background-color: lighten(get-color(color6), 30%);
+    }
+    &[data-status="mostly-sunny"] {
+        background-color: lighten(get-color(color6), 35%);
+    }
+    &[data-status="thunderstorms"] {
+        background-color: lighten(get-color(color3), 25%);
+    }
+    &[data-status="showers"] {
+        background-color: lighten(get-color(color3), 30%);
+    }
+    &[data-status="partly-cloudy"] {
+        background-color: lighten(get-color(color3), 40%);
+    }
+    &[data-status="breeze"] {
+        background-color: lighten(get-color(color10), 35%);
+    }
+    @include respond-to (small-screen) {
+        text-align: center;
+        border-bottom: 1px solid get-color(color0);
+        &:last-of-type {
+            border: none;
+        }
+    }
+}
+
+.weather-info__forecast__item__title {
+    font-size: 1.3rem;
+    color: get-color(color10);
+    padding-bottom: 0.5rem;
+}
+
+.weather-info__forecast__item__status {
+    font-weight: 700;
+    padding-bottom: 0.5rem;
+}
+
+.weather-info__forecast__item__temperature {
+    padding-bottom: 0.5rem;
+}
+
+.weather-info__forecast__item__temperature__high {
+    display: inline;
+    color: darken(get-color(color3), 15%);
+}
+
+.weather-info__forecast__item__temperature__low {
+    display: inline;
+    color: darken(get-color(color3), 10%);
+}

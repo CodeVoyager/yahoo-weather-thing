@@ -1,0 +1,70 @@
+@import '../base/_colors';
+.loader {
+    position: fixed;
+    top: 1rem;
+    left: 1rem;
+}
+
+.loader__inner {
+    position: relative;
+    display: flex;
+    flex-flow: row wrap;
+    width: 2rem;
+    height: 2rem;
+    transition: all 300ms ease-in-out 0s;
+    z-index: 1;
+}
+
+.loader__inner__element {
+    width: 33.3333%;
+    height: 33.3333%;
+    background-color: get-color(color7);
+    animation: cubes 1.5s infinite ease-in-out;
+    &--1 {
+        @extend .loader__inner__element;
+        animation-delay: .2s;
+    }
+    &--2 {
+        @extend .loader__inner__element;
+        animation-delay: .3s;
+    }
+    &--3 {
+        @extend .loader__inner__element;
+        animation-delay: .4s;
+    }
+    &--4 {
+        @extend .loader__inner__element;
+        animation-delay: .1s;
+    }
+    &--5 {
+        @extend .loader__inner__element;
+        animation-delay: .2s;
+    }
+    &--6 {
+        @extend .loader__inner__element;
+        animation-delay: .3s;
+    }
+    &--7 {
+        @extend .loader__inner__element;
+        animation-delay: 0s;
+    }
+    &--8 {
+        @extend .loader__inner__element;
+        animation-delay: .1s;
+    }
+    &--9 {
+        @extend .loader__inner__element;
+        animation-delay: .2s;
+    }
+}
+
+@keyframes cubes {
+    0%,
+    70%,
+    100% {
+        transform: scale3d(1, 1, 1);
+    }
+    35% {
+        transform: scale3d(0, 0, 1);
+    }
+}
