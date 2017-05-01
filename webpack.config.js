@@ -3,7 +3,7 @@ var isProduction = 'production' === process.env.NODE_ENV.trim(),
     HtmlWebpackPlugin = require('html-webpack-plugin'),
     ExtractTextPlugin = require('extract-text-webpack-plugin'),
     extractSCSS = new ExtractTextPlugin({
-        filename: "stylesheets/bundle-[name].css",
+        filename: isProduction ? "stylesheets/bundle-[hash:12]-[name].css" : "stylesheets/bundle-[name].css",
         disable: false,
         allChunks: true
     }),
@@ -26,7 +26,7 @@ module.exports = {
     entry: './src/js/app.js',
     output: {
         path: __dirname + "/public",
-        filename: 'javascripts/bundle.js',
+        filename: isProduction ? 'javascripts/bundle-[hash:12].js' : 'javascripts/bundle.js',
         publicPath: "/"
     },
     module: {
