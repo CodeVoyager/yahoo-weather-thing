@@ -35,3 +35,9 @@ jspm_packages
 
 # Optional REPL history
 .node_repl_history
+
+# Webpack generated assetss
+
+public/javascripts/*
+public/stylesheets/*
+views/layout.twig
